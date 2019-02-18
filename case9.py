@@ -131,3 +131,66 @@ def event():
         results()
     else:
         pass
+
+def main():
+    user_name = input("Добро пожаловать в игру Kingdom Legends. Попробуй себя в роли настоящего Правителя! \n "
+                      "Введите Ваш никнейм: ")
+    if data["Год"] == 0:
+        results()
+    else:
+        pass
+    while data['Земля'] > 202 * 0.25 and data['Казна'] > 251 * 0.25 and data['Народ'] > 2000 * 0.25 and \
+            data['Зерно'] > 0 and data['Смута'] < 10:
+        seed = data['Зерно']
+        price = randint(10, 30)
+        question = input("Хотите ли вы продать зерно по цене " + str(price) +
+                         "? Если да - введите 'да', если нет - 'нет':")
+        if question == "да":
+            tosell = int(input("Введите количетво зерна, которое вы хотите продать (в мешках):"))
+            while data['Зерно'] - tosell < 0:
+                tosell = int(input("Ми лорд, в нашей казне недостаточно средств. Введите количетво зерна,"
+                                   " которое вы хотите продать (в мешках):"))
+            selling(tosell, price)
+            results()
+        else:
+            pass
+
+        event()
+
+        price1 = randint(25, 40)
+        question1 = input("Хотите ли вы купить зерно по цене " + str(price1) +
+                          "? Если да - введите 'да', если нет - 'нет':")
+        if question1 == "да":
+            tobay = int(input("Введите количетво зерна, которое вы хотите купить (в бушелях):"))
+            while data['Казна'] - price * tobay < 0:
+                tobay = int(input("Ми лорд, в нашей казне недостаточно средств."
+                                  " Введите количетво зерна, которое вы хотите купить (в бушелях):"))
+            buy(tobay, price1)
+            results()
+        else:
+            pass
+
+        event()
+
+        zem = int(input("Введите сколько гектаров вы хотите отдать под засев:"))
+        while data['Земля'] < zem:
+            zem = int(input("У вас недостаточно земли. Введите сколько гектаров вы хотите отдать под засев: "))
+        while data['Зерно'] < zem * 7:
+            zem = int(input("У вас недостаточно зерна. Введите сколько гектаров вы хотите отдать под засев: "))
+        zasef(zem)
+
+        ed = int(input("Введите сколько зерна вы отдадите народу:"))
+        while ed > data['Зерно']:
+            ed = int(input("У вас недостаточно зерна. Введите сколько зерна вы отдадите народу:"))
+        nar(ed)
+        ura(zem)
+        people(seed)
+        data['Год'] = data['Год'] + 1
+        results()
+    print("GAME OVER!")
+    with open("total_results.txt", "w") as total:
+        print("Результаты игрока:{}".format(user_name), file=total)
+        print("Земля:{}\nКазна: {}\nНарод: {}\nЗерно: {}\n Смута: {}\n Авторитет: {}\n Год: {}".format(data["Земля"],
+                            data["Казна"], data["Народ"], data["Зерно"], data["Смута"],
+                                                                        data["Авторитет"], data["Год"]), file=total)
+
